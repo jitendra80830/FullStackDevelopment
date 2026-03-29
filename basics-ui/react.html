@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React APp</title>
+    <link rel="stylesheet" href="./css/index.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./react-lib/react.development.js"></script>
+    <script src="./react-lib/react-dom.development.js"></script>
+    <script>
+      const randomNumner = Math.floor(Math.random() * 100) + 1;
+      //   const numberElement = document.createElement("h1");
+      const numberElement = React.createElement(
+        "h1",
+        { style: { color: "green" } },
+        `Generated Number is ${randomNumner}`,
+      );
+      //   numberElement.innerHTML = `Generated Number is ${randomNumner}`;
+      //   const resultElement = document.createElement("h2");
+
+      const resultElement = React.createElement(
+        "h2",
+        { style: { color: "blue" } },
+        randomNumner % 2 == 0 ? "The number is even." : "The number is odd",
+      );
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+
+      root.render(
+        React.createElement("div", null, [numberElement, resultElement]),
+      );
+
+      //   const root = document.getElementById("root");
+      //   root.appendChild(numberElement);
+      //   root.appendChild(resultElement);
+    </script>
+  </body>
+</html>
