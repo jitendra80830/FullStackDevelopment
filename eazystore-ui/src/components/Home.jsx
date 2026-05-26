@@ -1,57 +1,54 @@
 import PageHeading from "./PageHeading";
 import ProductListings from "./ProductListings";
-import products from "../data/products";
 import BootstrapButton from "./BootstrapButton";
+import apiClient from "../api/apiClient";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const isActive = Math.random() > 0.5;
+  // const isActive = Math.random() > 0.5;
 
-  const styling = { textAlign: "center", color: isActive ? "dark" : "red" };
+  // const styling = { textAlign: "center", color: isActive ? "dark" : "red" };
+
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchProduct();
+  }, []);
+
+  const fetchProduct = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get("/products");
+      setProducts(response.data);
+    } catch (error) {
+      setError(
+        error?.response?.data?.message ||
+          "Failed to fetch the data, please try again.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="text-xl font-semibold">Loading products...</span>
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="text-xl text-red-500">Error: {error}</span>
+      </div>
+    );
+  }
   return (
     <>
-      {/* <h1
-        className={`my-heading ${isActive ? "primary-color" : "secondry-colo"}`}
-      >
-        Demo of scop of home page
-      </h1> */}
-
-      {/* <h1 style={styling}> Demo of scop of home page</h1> */}
-      <div className="home-container col-6">
-        <div className="container">
-          <BootstrapButton text="Submit" type="primary" />
-          <BootstrapButton text="Save" type="secondary" />
-          <BootstrapButton text="Ok" type="success" />
-          <BootstrapButton text="Cancel" type="danger" />
-          <BootstrapButton text="Submit" type="primary" />
-        </div>
-        <div className="d-grid gap-2 col-8 mx-auto">
-          <div className="alert alert-primary text-center" role="alert">
-            A simple primary alert—check it out!
-          </div>
-          <div className="alert alert-secondary text-center" role="alert">
-            A simple secondary alert—check it out!
-          </div>
-          <div className="alert alert-success text-center" role="alert">
-            A simple success alert—check it out!
-          </div>
-          <div className="alert alert-danger text-center" role="alert">
-            A simple danger alert—check it out!
-          </div>
-          <div className="alert alert-warning text-center" role="alert">
-            A simple warning alert—check it out!
-          </div>
-          <div className="alert alert-info text-center" role="alert">
-            A simple info alert—check it out!
-          </div>
-          <div className="alert alert-light text-center" role="alert">
-            A simple light alert—check it out!
-          </div>
-          <div className="alert alert-dark text-center" role="alert">
-            A simple dark alert—check it out!
-          </div>
-        </div>
-
-        {/* <button className="btn btn-primary">Button</button> */}
+      <div className="max-w-[1152px] mx-auto px-6 py-8">
         <PageHeading title="Explore Eazy Stickers">
           Add a touch of creativity to your space with our wide range of fun and
           unique stickers. Perfect for any occasion!
